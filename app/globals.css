@@ -1,4 +1,10 @@
-@import "tailwindcss";
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* rest of your CSS stays same */
+
 
 :root {
   --background: #0f0f1a;
@@ -9,7 +15,7 @@
 
 body {
   background: var(--background);
-  background-image: url('/bg.jpg');
+  background-image: url('/OIP.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center center;
