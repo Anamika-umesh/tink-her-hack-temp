@@ -1,11 +1,10 @@
 "use client";
+
 import React from "react";
 import { useRouter } from "next/navigation";
-export default function HomePage() {
+
+export default function AboutPage() {
   const router = useRouter();
-  const handleSend = () => {
-    alert("Your confession was sent anonymously 💌 (demo)");
-  };
 
   return (
     <main style={styles.container}>
@@ -18,32 +17,43 @@ export default function HomePage() {
           </div>
 
           <nav style={styles.nav}>
-  <span onClick={() => router.push("/home")}>Home</span>
-  <span onClick={() => router.push("/profile")}>Profile</span>
-  <span onClick={() => router.push("/receiver")}>Receiver</span>
-  <span onClick={() => router.push("/about")}>About</span>
-</nav>
-
+            <span onClick={() => router.push("/home")}>Home</span>
+            <span onClick={() => router.push("/profile")}>Profile</span>
+            <span onClick={() => router.push("/about")}>About</span>
+          </nav>
         </header>
 
         {/* CONTENT */}
         <section style={styles.content}>
-          <h2>Send Your Confession</h2>
+          <h2>About VEIL</h2>
 
-          <input
-            type="email"
-            placeholder="Receiver Email ID"
-            style={styles.input}
-          />
+          <p>
+            VEIL is a platform designed to help people express their hidden
+            feelings safely and anonymously. Sometimes words are hard to say
+            out loud — VEIL gives you a space where emotions can be shared
+            without fear or judgment.
+          </p>
 
-          <textarea
-            placeholder="Write your anonymous confession..."
-            style={styles.textarea}
-          />
+          <h3>✨ How It Works</h3>
+          <ul>
+            <li>Sign up and create your account.</li>
+            <li>Send anonymous confessions to anyone.</li>
+            <li>Receive heartfelt messages privately.</li>
+            <li>Stay secure — your identity remains hidden.</li>
+          </ul>
 
-          <button style={styles.button} onClick={handleSend}>
-            Send 💌
-          </button>
+          <h3>🔐 Our Mission</h3>
+          <p>
+            We believe emotions matter. VEIL aims to create a safe digital
+            space where honesty, vulnerability, and love can exist without
+            pressure.
+          </p>
+
+          <h3>💌 Why VEIL?</h3>
+          <p>
+            Whether it’s admiration, apology, appreciation, or love — VEIL
+            makes it easier to share what’s in your heart.
+          </p>
         </section>
 
         {/* FOOTER */}
@@ -97,47 +107,16 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: "flex",
     gap: "1.5rem",
     fontSize: "0.95rem",
-  },
-  navItem: {
     cursor: "pointer",
-    opacity: 0.9,
   },
   content: {
     flex: 1,
     padding: "3rem 2rem",
+    maxWidth: "800px",
+    margin: "0 auto",
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
-    maxWidth: "500px",
-  
-   
-   
-    
-  },
-  input: {
-    padding: "0.8rem",
-    borderRadius: "8px",
-    border: "none",
-    outline: "none",
-    width: "100%",
-  },
-  textarea: {
-    padding: "0.8rem",
-    borderRadius: "8px",
-    border: "none",
-    outline: "none",
-    minHeight: "120px",
-    width: "100%",
-  },
-  button: {
-    padding: "0.8rem",
-    borderRadius: "8px",
-    border: "none",
-    backgroundColor: "#e63946",
-    color: "white",
-    fontWeight: "bold",
-    cursor: "pointer",
-    width: "100%",
   },
   footer: {
     padding: "1rem",

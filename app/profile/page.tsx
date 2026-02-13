@@ -1,10 +1,20 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-export default function HomePage() {
+
+export default function ProfilePage() {
   const router = useRouter();
-  const handleSend = () => {
-    alert("Your confession was sent anonymously 💌 (demo)");
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [email, setEmail] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null);
+
+  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setPhoto(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -18,31 +28,54 @@ export default function HomePage() {
           </div>
 
           <nav style={styles.nav}>
-  <span onClick={() => router.push("/home")}>Home</span>
-  <span onClick={() => router.push("/profile")}>Profile</span>
-  <span onClick={() => router.push("/receiver")}>Receiver</span>
-  <span onClick={() => router.push("/about")}>About</span>
-</nav>
-
+            <span onClick={() => router.push("/home")}>Home</span>
+            <span onClick={() => router.push("/profile")}>Profile</span>
+            <span onClick={() => router.push("/receiver")}>Receiver</span>
+            <span onClick={() => router.push("/about")}>About</span>
+          </nav>
         </header>
 
         {/* CONTENT */}
         <section style={styles.content}>
-          <h2>Send Your Confession</h2>
+          <h2 style={{ textAlign: "center" }}>Your Profile</h2>
+
+          <div style={styles.avatarWrap}>
+            <img
+              src={photo || "/uploadphoto.png"}
+              alt="Profile"
+              style={styles.avatar}
+            />
+            <label style={styles.uploadBtn}>
+              Upload Photo
+              <input type="file" accept="image/*" hidden onChange={handlePhoto} />
+            </label>
+          </div>
+
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={styles.input}
+          />
 
           <input
             type="email"
-            placeholder="Receiver Email ID"
+            placeholder="Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
           />
 
           <textarea
-            placeholder="Write your anonymous confession..."
+            placeholder="Short bio (optional)"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
             style={styles.textarea}
           />
 
-          <button style={styles.button} onClick={handleSend}>
-            Send 💌
+          <button style={styles.button} onClick={() => alert("Saved (demo)")}>
+            Save Profile
           </button>
         </section>
 
@@ -97,10 +130,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: "flex",
     gap: "1.5rem",
     fontSize: "0.95rem",
-  },
-  navItem: {
     cursor: "pointer",
-    opacity: 0.9,
   },
   content: {
     flex: 1,
@@ -109,10 +139,27 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: "column",
     gap: "1rem",
     maxWidth: "500px",
-  
-   
-   
     
+  },
+  avatarWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  avatar: {
+    width: 90,
+    height: 90,
+    borderRadius: "50%",
+    objectFit: "cover",
+    border: "2px solid #fff",
+  },
+  uploadBtn: {
+    padding: "0.5rem 0.8rem",
+    borderRadius: 6,
+    background: "#e63946",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: "bold",
   },
   input: {
     padding: "0.8rem",
@@ -125,8 +172,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: "0.8rem",
     borderRadius: "8px",
     border: "none",
+    minHeight: 100,
     outline: "none",
-    minHeight: "120px",
     width: "100%",
   },
   button: {
