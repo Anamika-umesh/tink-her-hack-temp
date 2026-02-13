@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0f0f1a;
+  --foreground: #ffffff;
+  --primary-red: #b11226;
+  --light-red: #ffb3b3;
+}
+
+body {
+  background: var(--background);
+  background-image: url('/bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  color: var(--foreground);
+  margin: 0;
+}
+
+/* Optional helpers */
+input, textarea {
+  background: rgba(255, 179, 179, 0.08);
+  color: #fff;
+  border: 1px solid var(--light-red);
+}
+
+button {
+  background: linear-gradient(135deg, #b11226, #ff5c5c);
+  color: #fff;
+}
+
+input {
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #ffb3b3;
+  background-color: #2a0f14;
+  color: white;
+  outline: none;
+}
+button {
+  background: linear-gradient(135deg, #b11226, #ff5c5c);
+  color: #fff;
+}
+input {
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #ffb3b3;
+  background-color: #2a0f14;
+}
