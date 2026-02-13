@@ -1,12 +1,14 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AuthPage() {
   const router = useRouter();
+  const params = useSearchParams();
+
+  const redirect = params.get("redirect"); // 👈 get redirect from URL
 
   const [isLogin, setIsLogin] = useState(true);
-
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,21 +19,23 @@ export default function AuthPage() {
     const users = JSON.parse(localStorage.getItem("veilUsers") || "[]");
 
     if (isLogin) {
-      // LOGIN LOGIC
       const user = users.find(
         (u: any) => u.username === username && u.password === password
       );
 
       if (user) {
         localStorage.setItem("veilCurrentUser", username);
-        router.push("/home");
+
+        // ✅ Redirect correctly after login
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/home");
+        }
       } else {
         alert("Invalid username or password");
       }
     } else {
-      // SIGNUP LOGIC
-
-      // Check duplicate username or email
       const userExists = users.find(
         (u: any) => u.username === username || u.email === email
       );

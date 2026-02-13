@@ -3,8 +3,44 @@ import React from "react";
 import { useRouter } from "next/navigation";
 export default function HomePage() {
   const router = useRouter();
-  const handleSend = () => {
-    alert("Your confession was sent anonymously 💌 (demo)");
+  const [receiverEmail, setReceiverEmail] = React.useState("");
+  const [confession, setConfession] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const handleSend = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!receiverEmail || !confession) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch("/api/send-confession", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          receiverEmail,
+          confessionText: confession,
+          senderEmail: "Anonymous",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(`✨ Confession sent successfully!\n\nConfession ID: ${data.confessionId}`);
+        setReceiverEmail("");
+        setConfession("");
+      } else {
+        alert(`Error: ${data.error || "Failed to send confession"}`);
+      }
+    } catch (error) {
+      alert("Error sending confession: " + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,16 +69,20 @@ export default function HomePage() {
           <input
             type="email"
             placeholder="Receiver Email ID"
+            value={receiverEmail}
+            onChange={(e) => setReceiverEmail(e.target.value)}
             style={styles.input}
           />
 
           <textarea
             placeholder="Write your anonymous confession..."
+            value={confession}
+            onChange={(e) => setConfession(e.target.value)}
             style={styles.textarea}
           />
 
-          <button style={styles.button} onClick={handleSend}>
-            Send 💌
+          <button style={styles.button} onClick={handleSend} disabled={loading}>
+            {loading ? "Sending..." : "Send 💌"}
           </button>
         </section>
 
