@@ -24,3 +24,40 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = (await req.json()) as {
+      token?: string;
+      status?: "accepted" | "rejected";
+      receiverReply?: string;
+    };
+
+    const { token, status, receiverReply } = body;
+
+    if (!token || !confessionStore[token]) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 400 });
+    }
+
+    // Update confession store
+    confessionStore[token].status = status || "pending";
+    confessionStore[token].receiverReply = receiverReply || "";
+    confessionStore[token].respondedAt = new Date().toISOString();
+
+    // Mark as invalid if rejected
+    if (status === "rejected") {
+      confessionStore[token].invalid = true;
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Confession ${status || "updated"}`,
+    });
+  } catch (err) {
+    console.error("respond-confession POST error:", err);
+    return NextResponse.json(
+      { error: "Failed to respond to confession" },
+      { status: 500 }
+    );
+  }
+}

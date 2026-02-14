@@ -23,7 +23,7 @@ export default function HomePage() {
         body: JSON.stringify({
           receiverEmail,
           confessionText: confession,
-          senderEmail: "Anonymous",
+          senderEmail: "Anjana",
         }),
       });
 
@@ -56,7 +56,7 @@ export default function HomePage() {
           <nav style={styles.nav}>
   <span onClick={() => router.push("/home")}>Home</span>
   <span onClick={() => router.push("/profile")}>Profile</span>
-  <span onClick={() => router.push("/receiver")}>Receiver</span>
+
   <span onClick={() => router.push("/about")}>About</span>
 </nav>
 
@@ -160,6 +160,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: "none",
     outline: "none",
     width: "100%",
+    transition: "all 0.2s ease",
   },
   textarea: {
     padding: "0.8rem",
@@ -168,16 +169,18 @@ const styles: { [key: string]: React.CSSProperties } = {
     outline: "none",
     minHeight: "120px",
     width: "100%",
+    transition: "all 0.2s ease",
   },
   button: {
     padding: "0.8rem",
     borderRadius: "8px",
     border: "none",
-    backgroundColor: "#e63946",
+    backgroundColor: "#f11023",
     color: "white",
     fontWeight: "bold",
     cursor: "pointer",
     width: "100%",
+    transition: "all 0.3s ease",
   },
   footer: {
     padding: "1rem",

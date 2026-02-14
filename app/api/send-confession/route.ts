@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
     confessionStore[token] = {
       confessionText,
       senderProfile: {
-        name: senderEmail || "Anonymous",
+        name: senderEmail || "Anjana",
         bio: "Someone who secretly admires you.",
         photo: "/avatar.png",
-        contact: "Not shared",
+        contact: "9124567908",
       },
       status: "pending",      // pending | accepted | rejected
       receiverReply: null,
@@ -49,14 +49,17 @@ export async function POST(request: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    // Receiver page (accept)
-    const receiverLink = `${appUrl}/receiver?token=${token}`;
+    // Receiver page (accept) - redirect through login first with proper URL encoding
+    const receiverPath = `/receiver?token=${token}`;
+    const receiverLink = `${appUrl}/?redirect=${encodeURIComponent(receiverPath)}`;
+
+    console.log("Generated confession token:", token);
 
     // Reject link (email button)
     const rejectLink = `${appUrl}/api/respond-confession?token=${token}&action=reject`;
 
     const emailBody = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 12px; background: #111; color: #fff;">
+      <div style="font-family: Cascadia Code, monospace; max-width: 600px; margin: auto; padding: 20px; border-radius: 12px; background: #111; color: #fff;">
         <h2 style="color: #e63946; text-align: center;">💌 You've Received an Anonymous Confession</h2>
         <p style="text-align: center;">You can choose to accept or reject this confession.</p>
 

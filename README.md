@@ -6,11 +6,11 @@
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: Hack N Heels
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: Anamika Umesh - Christ College of Engineering
+- Member 2: Neha James - Christ College of Engineering
 
 ### Hosted Project Link
 [mention your project hosted link here]
