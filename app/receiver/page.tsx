@@ -11,9 +11,10 @@ export default function ReceiverPage() {
   const [loading, setLoading] = useState(true);
   const [confession, setConfession] = useState<string | null>(null);
   const [senderProfile, setSenderProfile] = useState<any>(null);
+  const [reply, setReply] = useState("");
+  const [replySent, setReplySent] = useState(false);
   const [error, setError] = useState("");
 
-  // 🔁 Fetch confession from backend using token
   useEffect(() => {
     if (!token) {
       setError("Invalid or missing token.");
@@ -37,6 +38,40 @@ export default function ReceiverPage() {
       });
   }, [token]);
 
+  const sendResponse = async (status: "accepted" | "rejected") => {
+    await fetch("/api/respond-confession", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        status,
+        receiverReply: "",
+      }),
+    });
+
+    setAccepted(status === "accepted");
+  };
+
+  const sendReply = async () => {
+    if (!reply.trim()) return alert("Please write a reply first.");
+
+    const res = await fetch("/api/respond-confession", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        status: "accepted",
+        receiverReply: reply,
+      }),
+    });
+
+    if (res.ok) {
+      setReplySent(true);
+    } else {
+      alert("Failed to send reply");
+    }
+  };
+
   return (
     <main style={styles.container}>
       <header style={styles.header}>
@@ -44,7 +79,6 @@ export default function ReceiverPage() {
         <nav style={styles.nav}>
           <span onClick={() => router.push("/home")}>Home</span>
           <span onClick={() => router.push("/profile")}>Profile</span>
-          <span onClick={() => router.push("/receiver")}>Receiver</span>
         </nav>
       </header>
 
@@ -60,10 +94,10 @@ export default function ReceiverPage() {
               “Someone has sent you a hidden message. Accept to reveal it.”
             </p>
             <div style={styles.actions}>
-              <button style={styles.accept} onClick={() => setAccepted(true)}>
+              <button style={styles.accept} onClick={() => sendResponse("accepted")}>
                 Accept ❤️
               </button>
-              <button style={styles.reject} onClick={() => setAccepted(false)}>
+              <button style={styles.reject} onClick={() => sendResponse("rejected")}>
                 Reject 💔
               </button>
             </div>
@@ -81,13 +115,31 @@ export default function ReceiverPage() {
               <img src={senderProfile.photo} alt="Sender" style={styles.avatar} />
               <p><b>Name:</b> {senderProfile.name}</p>
               <p><b>Bio:</b> {senderProfile.bio}</p>
+              <p><b>Contact:</b> {senderProfile.contact || "Hidden"}</p>
             </div>
+
+            {!replySent ? (
+              <div style={styles.card}>
+                <h3>Send Reply</h3>
+                <textarea
+                  placeholder="Type your reply..."
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)}
+                  style={styles.textarea}
+                />
+                <button style={styles.accept} onClick={sendReply}>
+                  Send Reply 💌
+                </button>
+              </div>
+            ) : (
+              <p style={{ color: "#2ecc71" }}>Reply sent successfully ✅</p>
+            )}
           </>
         )}
 
         {accepted === false && (
           <div style={styles.card}>
-            <p>It's okay 💙 Thanks for your time. Sorry for disturbing you.</p>
+            <p>It's okay 💙 Thanks for your time.</p>
           </div>
         )}
       </section>
@@ -110,7 +162,8 @@ const styles: { [key: string]: React.CSSProperties } = {
   actions: { display: "flex", gap: "1rem" },
   accept: { padding: "0.6rem 1rem", borderRadius: 8, border: "none", background: "#2ecc71", cursor: "pointer" },
   reject: { padding: "0.6rem 1rem", borderRadius: 8, border: "none", background: "#e63946", color: "white", cursor: "pointer" },
-  profileCard: { padding: "1rem", borderRadius: 10, background: "#1a1a1a", display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 320 },
+  profileCard: { padding: "1rem", borderRadius: 10, background: "#1a1a1a", display: "flex", flexDirection: "column", gap: "0.6rem", maxWidth: 320 },
   avatar: { width: 80, height: 80, borderRadius: "50%", objectFit: "cover" },
+  textarea: { padding: "0.6rem", borderRadius: 6, minHeight: 60 },
   footer: { padding: "1rem", background: "#1a1a1a", textAlign: "center", color: "#aaa" },
 };

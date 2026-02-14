@@ -4,6 +4,10 @@ import { confessionStore } from "../send-confession/route";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
+if (!token || !confessionStore[token] || confessionStore[token].invalid) {
+  return NextResponse.json({ error: "This link is no longer valid" }, { status: 404 });
+}
+
 
   if (!token) {
     return NextResponse.json({ error: "Token missing" }, { status: 400 });

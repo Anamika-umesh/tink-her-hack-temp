@@ -1,13 +1,38 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const router = useRouter();
+
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
+  const [contact, setContact] = useState("");
   const [photo, setPhoto] = useState<string | null>(null);
+
+  const [myConfessions, setMyConfessions] = useState<any[]>([]);
+
+  // 🔁 Load profile from localStorage (demo)
+  useEffect(() => {
+    const saved = localStorage.getItem("veilProfile");
+    if (saved) {
+      const p = JSON.parse(saved);
+      setName(p.name || "");
+      setBio(p.bio || "");
+      setEmail(p.email || "");
+      setContact(p.contact || "");
+      setPhoto(p.photo || null);
+    }
+
+    const senderName = localStorage.getItem("veilCurrentUser");
+    if (senderName) {
+      fetch(`/api/my-confessions?senderName=${senderName}`)
+        .then((res) => res.json())
+        .then((data) => setMyConfessions(data))
+        .catch(() => {});
+    }
+  }, []);
 
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -15,6 +40,12 @@ export default function ProfilePage() {
     const reader = new FileReader();
     reader.onload = () => setPhoto(reader.result as string);
     reader.readAsDataURL(file);
+  };
+
+  const handleSave = () => {
+    const profile = { name, bio, email, contact, photo };
+    localStorage.setItem("veilProfile", JSON.stringify(profile));
+    alert("Profile saved successfully!");
   };
 
   return (
@@ -67,6 +98,14 @@ export default function ProfilePage() {
             style={styles.input}
           />
 
+          <input
+            type="text"
+            placeholder="Contact Number"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            style={styles.input}
+          />
+
           <textarea
             placeholder="Short bio (optional)"
             value={bio}
@@ -74,9 +113,34 @@ export default function ProfilePage() {
             style={styles.textarea}
           />
 
-          <button style={styles.button} onClick={() => alert("Saved (demo)")}>
+          <button style={styles.button} onClick={handleSave}>
             Save Profile
           </button>
+
+          {/* 🔔 SENT CONFESSIONS STATUS */}
+          <h3 style={{ marginTop: "2rem" }}>My Sent Confessions</h3>
+
+          {myConfessions.length === 0 && (
+            <p style={{ color: "#ccc" }}>No confessions sent yet.</p>
+          )}
+
+          {myConfessions.map((c) => (
+            <div key={c.token} style={styles.confessionCard}>
+              <p><b>Message:</b> {c.confessionText}</p>
+              <p><b>Status:</b> {c.status || "pending"}</p>
+
+              {c.status === "accepted" && (
+                <>
+                  <p style={{ color: "#2ecc71" }}>Accepted ❤️</p>
+                  <p><b>Receiver Reply:</b> {c.receiverReply || "No reply yet"}</p>
+                </>
+              )}
+
+              {c.status === "rejected" && (
+                <p style={{ color: "#e63946" }}>Rejected 💔</p>
+              )}
+            </div>
+          ))}
         </section>
 
         {/* FOOTER */}
@@ -138,8 +202,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
-    maxWidth: "500px",
-    
+    maxWidth: "520px",
   },
   avatarWrap: {
     display: "flex",
@@ -185,6 +248,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: "bold",
     cursor: "pointer",
     width: "100%",
+  },
+  confessionCard: {
+    background: "#1a1a1a",
+    padding: "1rem",
+    borderRadius: 10,
+    marginTop: "1rem",
   },
   footer: {
     padding: "1rem",
