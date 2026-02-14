@@ -6,13 +6,21 @@ import { v4 as uuidv4 } from "uuid";
 // In-memory store for demo purposes. Replace with DB in production.
 export const confessionStore: Record<string, any> = {};
 
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+// Lazy-initialize transporter to avoid connection timeout during build
+let transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
+
+function getTransporter() {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE || "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+  return transporter;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -81,7 +89,7 @@ export async function POST(request: NextRequest) {
       </div>
     `;
 
-    await transporter.sendMail({
+    await getTransporter().sendMail({
       from: process.env.EMAIL_USER || "noreply@veil.app",
       to: receiverEmail,
       subject: "💌 Anonymous confession received",
