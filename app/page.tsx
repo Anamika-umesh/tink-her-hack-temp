@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+// Prevent static generation for this dynamic page
+export const dynamic = "force-dynamic";
+
 export default function AuthPage() {
   const router = useRouter();
   const params = useSearchParams();
