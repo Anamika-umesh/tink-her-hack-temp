@@ -16,40 +16,47 @@
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+VEIL is a web-based anonymous confession platform that allows users to send hidden messages to someone via a secure email link. The receiver can choose to accept or reject the confession, and only upon acceptance is the message and sender profile revealed.
 
 ### The Problem statement
-[What problem are you solving?]
+Many people struggle to express personal feelings or confessions due to fear of rejection, embarrassment, or social pressure. Existing social platforms do not provide a safe and anonymous way to share sensitive messages with controlled disclosure.
 
 ### The Solution
-[How are you solving it?]
-
----
+VEIL provides a secure, token-based anonymous messaging system. The receiver gets a private email link and can decide whether to reveal the confession. The sender’s identity and message remain hidden until acceptance, ensuring privacy, emotional safety, and consent-based communication.
 
 ## Technical Details
 
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+- Languages used:  JavaScript,TypeScript
+- Frameworks used: Next.js, React
+- Libraries used: Fetch API (for API calls), CSS-in-JS (inline styles)
+- Tools used: VS Code, Git & GitHub, Node.js, Browser Developer Tools
+
 
 **For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
+- NA
 
----
 
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+-Anonymous Confession Sending
+  Users can send confessions without revealing their identity.
+-Secure Email Link with Token
+  Each confession is accessed through a unique, time-safe token link.
+-Accept / Reject Mechanism
+  Receiver can accept to reveal the confession or reject to discard it.
+-Sender Profile Reveal on Acceptance
+  Sender details are shown only if the confession is accepted.
+-Reply System
+  Receiver can send a reply after accepting the confession.
+-Link Expiry / Invalid Link Handling
+  Prevents reuse of links after rejection or expiry.
+-Login & Signup Authentication
+  Simple user authentication for sender identity management.
+
 
 ---
 
@@ -59,21 +66,21 @@ List the key features of your project:
 
 #### Installation
 ```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
+npm install
 ```
 
 #### Run
 ```bash
-[Run commands - e.g., npm start, python app.py]
+npm run dev
 ```
 
 ### For Hardware:
 
 #### Components Required
-[List all components needed with specifications]
+NA
 
 #### Circuit Setup
-[Explain how to set up the circuit]
+NA
 
 ---
 
@@ -83,26 +90,26 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+[sing in page](screenshots/signup.png)
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+[profile page](screenshots/profile.png)
+
+[receiver receives the msg](screenshots/receivermsg.png)
 
 #### Diagrams
 
 **System Architecture:**
 
-![Architecture Diagram](docs/architecture.png)
-*Explain your system architecture - components, data flow, tech stack interaction*
+User → Web App (Next.js) → API Routes → Database
+
+This diagram shows how the user interface (frontend) communicates with the backend APIs, email service, and database. It explains the overall structure of the VEIL system.
 
 **Application Workflow:**
 
-![Workflow](docs/workflow.png)
-*Add caption explaining your workflow*
+Sender → Confession Form → Database → Email Link → Receiver → Accept/Reject → Database → Sender Notification
+
+This diagram illustrates how data flows from the sender to the receiver through token-based email links and how responses are stored and processed.
 
 ---
 
@@ -110,11 +117,7 @@ List the key features of your project:
 
 #### Schematic & Circuit
 
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
 
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
 
 #### Build Photos
 
